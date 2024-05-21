@@ -1,6 +1,10 @@
 { config, pkgs, ... }:
 
 {
+  # imports = [
+  #     ../../main-user.nix
+  # ];
+
   # Home Manager needs a bit of information about you and the paths it should
   # manage.
   home.username = "zahry";
@@ -69,6 +73,20 @@
   #
   home.sessionVariables = {
     # EDITOR = "emacs";
+  };
+
+
+  programs.neovim = {
+    enable = true;
+    viAlias = true;
+    vimAlias = true;
+    vimdiffAlias = true;
+
+    extraPackages = with pkgs; [
+      lua-language-server
+      nil
+    ];
+
   };
 
   # Let Home Manager install and manage itself.

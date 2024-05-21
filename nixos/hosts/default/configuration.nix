@@ -7,9 +7,10 @@
 {
   imports =
     [ # Include the results of the hardware scan.
-      ./hardware-configuration.nix
-      inputs.home-manager.nixosModules.default
-      ../../main-user.nix
+ 
+        ../../main-user.nix
+        ./hardware-configuration.nix
+        inputs.home-manager.nixosModules.default
     ];
 
   main-user.enable = true;
@@ -100,34 +101,59 @@
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
-    pkgs.vim 
-    neovim
-    git
+    
+    # DesktopEnv
     (pkgs.waybar.overrideAttrs(oldAttrs: {
     	mesonFlags = oldAttrs.mesonFlags ++ ["-Dexperimental=true"];
     }))
     pkgs.dunst
-    pkgs.firefox
     libnotify
     swww
     rofi-wayland
+    zsh-powerlevel10k
     alacritty
+    shotman
+    pavucontrol
+
+    # Cli
     zellij
-    gcc
     fzf
     thefuck
     zoxide
     atuin
     eza
     bat
-    spotify
-    zsh-powerlevel10k
     btop
+    neofetch
+
+    # Functionality
     networkmanagerapplet
+    shotman
+    
+    # Apps
+    pkgs.firefox
     discord
-    appflowy
     obsidian
+    spotify
+    vscode
+    jetbrains.datagrip
+
+    # Dev
+    pkgs.vim 
+    neovim
+    git
+    gcc
+    cargo
+    rustc
     lazygit
+    gnumake
+    python310
+    nodejs 
+    killall
+    python310Packages.pip
+    python310Packages.pipx
+    python310Packages.numpy
+    python310Packages.pyarrow
   #  wget
   ];
 
