@@ -90,7 +90,7 @@
 
 
   fonts.packages = with pkgs; [
-    (nerdfonts.override { fonts = [ "FiraCode" "DroidSansMono" ]; })
+    (nerdfonts.override { fonts = [ "FiraCode" "DroidSansMono" "MartianMono"]; })
     jetbrains-mono
   ];
 
@@ -114,6 +114,8 @@
     alacritty
     shotman
     pavucontrol
+    wev
+    brightnessctl
 
     # Cli
     zellij
