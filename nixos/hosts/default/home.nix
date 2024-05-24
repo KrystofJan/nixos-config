@@ -83,14 +83,23 @@
     vimdiffAlias = true;
 
     extraPackages = with pkgs; [
-      lua-language-server
-      nil
-      rust-analyzer
-      stylua
+        # lsps
+        lua-language-server
+        nil
+        rust-analyzer
+        gopls
+        nodePackages_latest.typescript-language-server
+        csharp-ls
+
+        #formatters
+        stylua
+        rustfmt
+        prettierd
     ];
 
     plugins = with pkgs.vimPlugins; [
         comment-nvim
+        friendly-snippets
         nvim-lspconfig
         gruvbox-nvim
         gitsigns-nvim
