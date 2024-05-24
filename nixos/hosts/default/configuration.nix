@@ -120,6 +120,7 @@
     # Cli
     zellij
     fzf
+    fd
     thefuck
     zoxide
     atuin
