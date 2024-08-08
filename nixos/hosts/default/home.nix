@@ -102,6 +102,7 @@
         friendly-snippets
         nvim-lspconfig
         gruvbox-nvim
+        base16-nvim
         gitsigns-nvim
         lazygit-nvim
         which-key-nvim

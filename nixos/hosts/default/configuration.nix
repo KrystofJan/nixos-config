@@ -63,7 +63,16 @@
     layout = "us";
     displayManager.gdm.enable = true;
     displayManager.gdm.wayland = true;
-    xkbVariant = "";
+    xkbVariant = ""; };
+
+  services.postgresql = {
+    enable = true;
+    ensureDatabases = [ "mydatabase" ];
+    package = pkgs.postgresql_15;
+    authentication = pkgs.lib.mkOverride 10 ''
+      #type database  DBuser  auth-method
+      local all       all     trust
+    '';
   };
 	
   # Define a user account. Don't forget to set a password with ‘passwd’.
@@ -112,10 +121,12 @@
     rofi-wayland
     zsh-powerlevel10k
     alacritty
-    shotman
     pavucontrol
     wev
+    wl-clipboard
+    imagemagick
     brightnessctl
+    imv
 
     # Cli
     zellij
@@ -131,15 +142,21 @@
 
     # Functionality
     networkmanagerapplet
-    shotman
+    grim
+    slurp
+    hyprlock
+    ripgrep
     
     # Apps
     pkgs.firefox
     discord
     obsidian
     spotify
+    slack
     vscode
     jetbrains.datagrip
+    jetbrains.rider
+    postman
 
     # Dev
     pkgs.vim 
@@ -150,6 +167,7 @@
     rustc
     lazygit
     gnumake
+    typescript
     python310
     nodejs 
     killall
@@ -157,8 +175,13 @@
     python310Packages.pipx
     python310Packages.numpy
     python310Packages.pyarrow
-  #  wget
+    python310Packages.pytest
+    wget
+    pkgs.dotnetCorePackages.sdk_9_0
   ];
+
+
+
 
   xdg.portal = { 
 	enable = true;
