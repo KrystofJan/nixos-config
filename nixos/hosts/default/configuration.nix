@@ -86,6 +86,9 @@
   # Allow unfree packages
   nixpkgs.config.allowUnfree = true;
 
+    
+
+
   home-manager = {
     extraSpecialArgs = {inherit inputs;};
     users = {
@@ -107,10 +110,18 @@
   programs.zsh.enable = true;
   users.defaultUserShell = pkgs.zsh;
 
+
+  virtualisation.virtualbox.host.enable = true;
+  users.extraGroups.vboxusers.members = [ "zahry" ];
+
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
     
+
+  inputs.zen-browser.packages."${system}".specific
+
+
     # DesktopEnv
     (pkgs.waybar.overrideAttrs(oldAttrs: {
     	mesonFlags = oldAttrs.mesonFlags ++ ["-Dexperimental=true"];
@@ -139,6 +150,7 @@
     bat
     btop
     neofetch
+    yazi
 
     # Functionality
     networkmanagerapplet
@@ -165,17 +177,20 @@
     gcc
     cargo
     rustc
+    rustup
     lazygit
     gnumake
     typescript
     python310
-    nodejs 
+    nodejs_22
     killall
     python310Packages.pip
     python310Packages.pipx
     python310Packages.numpy
     python310Packages.pyarrow
     python310Packages.pytest
+    nodePackages_latest.ts-node
+    nodePackages_latest.nodemon    
     wget
     pkgs.dotnetCorePackages.sdk_9_0
   ];

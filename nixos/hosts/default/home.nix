@@ -123,6 +123,7 @@
         mini-nvim
         nvim-treesitter.withAllGrammars
         lualine-nvim
+        oil-nvim
 	];
 
   };
