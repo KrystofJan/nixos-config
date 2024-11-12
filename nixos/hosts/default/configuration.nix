@@ -65,15 +65,16 @@
     displayManager.gdm.wayland = true;
     xkbVariant = ""; };
 
-  services.postgresql = {
-    enable = true;
-    ensureDatabases = [ "mydatabase" ];
-    package = pkgs.postgresql_15;
-    authentication = pkgs.lib.mkOverride 10 ''
-      #type database  DBuser  auth-method
-      local all       all     trust
-    '';
-  };
+  # NOTE: Using the docker one now
+  # services.postgresql = {
+  #   enable = true;
+  #   ensureDatabases = [ "mydatabase" ];
+  #   package = pkgs.postgresql_15;
+  #   authentication = pkgs.lib.mkOverride 10 ''
+  #     #type database  DBuser  auth-method
+  #     local all       all     trust
+  #   '';
+  # };
 	
   # Define a user account. Don't forget to set a password with ‘passwd’.
 #  users.users.zahry = {
@@ -112,7 +113,10 @@
 
 
   virtualisation.virtualbox.host.enable = true;
+  virtualisation.docker.enable = true;
   users.extraGroups.vboxusers.members = [ "zahry" ];
+  users.extraGroups.docker.members = [ "zahry" ];
+
 
   # List packages installed in system profile. To search, run:
   # $ nix search wget
@@ -151,6 +155,7 @@
     btop
     neofetch
     yazi
+    act        
 
     # Functionality
     networkmanagerapplet
