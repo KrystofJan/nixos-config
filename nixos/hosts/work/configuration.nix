@@ -7,6 +7,7 @@
 {
   imports =
     [ # Include the results of the hardware scan.
+        ./terminal/terminal.nix
         ./wayland/window-manager.nix 
         ../../main-user.nix
         ./hardware-configuration.nix
@@ -55,8 +56,6 @@
     LC_TIME = "cs_CZ.UTF-8";
   };
 
-  # Configure keymap in X11
-
   nixpkgs.config.allowUnfree = true;
 
   home-manager = {
@@ -68,7 +67,6 @@
 
   security.polkit.enable = true;
 
-
   fonts.packages = with pkgs; [
     # TODO: Deal with nerdfonts
     nerd-fonts.fira-code
@@ -77,11 +75,6 @@
     # nerd-fonts.MartianMono
     jetbrains-mono
   ];
-
-  # Set up zsh
-  programs.zsh.enable = true;
-  users.defaultUserShell = pkgs.zsh;
-
 
   virtualisation.virtualbox.host.enable = true;
   virtualisation.docker.enable = true;
@@ -94,8 +87,6 @@
   environment.systemPackages = with pkgs; [
     libnotify
     rofi-wayland
-    zsh-powerlevel10k
-    kitty
     pavucontrol
     wev
     imagemagick
@@ -105,29 +96,13 @@
     libglvnd
     wayland-utils
 
-    # Cli
-    zellij
-    fzf
-    fd
-    thefuck
-    zoxide
-    atuin
-    eza
-    bat
-    btop
-    neofetch
-    yazi
-    act        
-    cowsay
-    kanshi
-    lazygit
-
     # Functionality
     networkmanagerapplet
     grim
     slurp
     ripgrep
     read-edid
+    kanshi
     
     # Apps
     firefox
@@ -201,5 +176,4 @@
   # Before changing this value read the documentation for this option
   # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
   system.stateVersion = "23.11"; # Did you read the comment?
-
 }
