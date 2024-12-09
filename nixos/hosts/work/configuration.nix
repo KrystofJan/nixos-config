@@ -7,7 +7,7 @@
 {
   imports =
     [ # Include the results of the hardware scan.
- 
+        ./wayland/window-manager.nix 
         ../../main-user.nix
         ./hardware-configuration.nix
         inputs.home-manager.nixosModules.default
@@ -26,8 +26,7 @@
     size = 16 * 1024; #16GB
   }];
 
-  networking.hostName = "perun"; # Define your hostname.
-  #  networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
+  networking.hostName = "chernobog"; # Define your hostname.
 
   # Configure network proxy if necessary
   # networking.proxy.default = "http://user:password@proxy:port/";
@@ -57,38 +56,8 @@
   };
 
   # Configure keymap in X11
-  services.xserver = {
-    enable = true;
-    videoDrivers = [ "amdgpu" ];
-    layout = "us";
-    displayManager.gdm.enable = true;
-    displayManager.gdm.wayland = true;
-    xkbVariant = ""; };
 
-  # NOTE: Using the docker one now
-  # services.postgresql = {
-  #   enable = true;
-  #   ensureDatabases = [ "mydatabase" ];
-  #   package = pkgs.postgresql_15;
-  #   authentication = pkgs.lib.mkOverride 10 ''
-  #     #type database  DBuser  auth-method
-  #     local all       all     trust
-  #   '';
-  # };
-	
-  # Define a user account. Don't forget to set a password with ‘passwd’.
-#  users.users.zahry = {
- #   isNormalUser = true;
-  #  description = "Jan-Krystof Zahrandik";
-   # extraGroups = [ "networkmanager" "wheel" ];
-    #packages = with pkgs; [];
-  #};
-
-  # Allow unfree packages
   nixpkgs.config.allowUnfree = true;
-
-    
-
 
   home-manager = {
     extraSpecialArgs = {inherit inputs;};
@@ -97,14 +66,13 @@
     };
   };
 
-  # Hyprland
-  programs.hyprland.enable = true;
-  # programs.hyprland.package = inputs.hyprland.packages."${pkgs.system}".hyprland;
+  security.polkit.enable = true;
 
 
   fonts.packages = with pkgs; [
-    # TODO: Fix nerdfonts
-    # nerd-fonts.FiraCode
+    # TODO: Deal with nerdfonts
+    nerd-fonts.fira-code
+    nerd-fonts.martian-mono
     # nerd-fonts.DroidSansMono
     # nerd-fonts.MartianMono
     jetbrains-mono
@@ -124,27 +92,18 @@
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
-    
-
-  inputs.zen-browser.packages."${system}".specific
-
-
-    # DesktopEnv
-    (pkgs.waybar.overrideAttrs(oldAttrs: {
-    	mesonFlags = oldAttrs.mesonFlags ++ ["-Dexperimental=true"];
-    }))
-    pkgs.dunst
     libnotify
-    swww
     rofi-wayland
     zsh-powerlevel10k
-    alacritty
+    kitty
     pavucontrol
     wev
-    wl-clipboard
     imagemagick
     brightnessctl
     imv
+    libGL
+    libglvnd
+    wayland-utils
 
     # Cli
     zellij
@@ -159,59 +118,50 @@
     neofetch
     yazi
     act        
+    cowsay
+    kanshi
+    lazygit
 
     # Functionality
     networkmanagerapplet
     grim
     slurp
-    hyprlock
     ripgrep
+    read-edid
     
     # Apps
-    pkgs.firefox
+    firefox
     discord
     obsidian
     spotify
     slack
     vscode
-    jetbrains.datagrip
-    jetbrains.rider
     postman
+    inputs.zen-browser.packages."${system}".specific
 
     # Dev
-    pkgs.vim 
+    vim 
     neovim
     git
     gcc
-    cargo
-    rustc
-    rustup
-    lazygit
-    gnumake
-    typescript
-    python310
-    nodejs_22
-    killall
-    python310Packages.pip
-    python310Packages.pipx
-    python310Packages.numpy
-    python310Packages.pyarrow
-    python310Packages.pytest
-    nodePackages_latest.ts-node
-    nodePackages_latest.nodemon    
     wget
-    pkgs.dotnetCorePackages.sdk_9_0
+    curl
   ];
 
+  services.gnome.gnome-keyring.enable = true;
 
+    systemd.user.services.kanshi = {
+        description = "kanshi daemon";
+        environment = {
+            WAYLAND_DISPLAY = "wayland-1";
+            DISPLAY = ":0";
+        };
+        serviceConfig = {
+            Type = "simple";
+            ExecStart = ''${pkgs.kanshi}/bin/kanshi -c kanshi'';
+        };
+    };
 
-
-  xdg.portal = { 
-	enable = true;
-  	extraPortals = [pkgs.xdg-desktop-portal-gtk];
-  };
-
-  sound.enable = true;
   security.rtkit.enable = true;
   services.pipewire = {
 	enable = true;
