@@ -2,15 +2,14 @@
 
 {
   imports =
-    [
-        ./terminal/terminal.nix
-        ./wayland/window-manager.nix 
-        # ./i3/window-manager.nix
+    [ 
+        ./wayland/window-manager.nix # ./i3/window-manager.nix
         ./wayland/login-manager.nix
         ../../main-user.nix 
         ./hardware-configuration.nix
         inputs.home-manager.nixosModules.default
     ];
+
 
   main-user.enable = true;
   main-user.userName = "zahry";
@@ -18,10 +17,7 @@
   # Bootloader.
   boot.loader.efi.canTouchEfiVariables = true;
   boot.loader.grub = {
-    enable = true;
-    devices = ["nodev"];
-    efiSupport = true;
-    useOSProber = true;
+    enable = true; devices = ["nodev"]; efiSupport = true; useOSProber = true;
   };
 
   hardware.i2c.enable = true;
@@ -111,24 +107,11 @@
     obsidian
     spotify
     slack
-    vscode
-    postman
     inputs.zen-browser.packages."${system}".specific
-
-    # Dev
-    vim 
-    neovim
-    git
-    gcc
-    wget
-    curl
   ];
 
   services.gnome.gnome-keyring.enable = true;
 
-  programs.git = {
-    enable = true;
-  };
 
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.
@@ -143,5 +126,7 @@
   # Enable the OpenSSH daemon.
   # services.openssh.enable = true;
 
+  programs.zsh.enable = true;
+  users.defaultUserShell = pkgs.zsh;
   system.stateVersion = "23.11";
 }
