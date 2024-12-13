@@ -4,44 +4,49 @@
 { config, lib, pkgs, modulesPath, ... }:
 
 {
-  imports = [ ];
+  imports = [ 
+      (modulesPath + "/installer/scan/not-detected.nix")
+  ];
 
-  boot.initrd.availableKernelModules = [ 
-      "ata_piix"
-      "ohci_pci"
-      "ehci_pci"
-      "ahci"
-      "sd_mod"
-      "sr_mod"
-      "xhci_pci"
-      "intel_lpss_pci"
+  boot.initrd.availableKernelModules = [ "xhci_pci" "thunderbolt" "nvme" "uas" "sd_mod" "i915" ];
+  boot.kernelModules = [ "kvm-intel" "i2c-dev" "i915" ];
+  boot.kernelParams = [
+   "acpi_backlight=none"
+   # "i915.force_probe=7d45"
   ];
   boot.initrd.kernelModules = [ ];
-  boot.kernelModules = [ "kvm-intel" ];
+  services.udev.extraRules = ''
+      KERNEL=="i2c-[0-9]*", GROUP="i2c", MODE="0660"
+  '';
+
   boot.extraModulePackages = [ ];
 
   fileSystems."/" =
-    { device = "/dev/disk/by-uuid/40bc8097-c049-48bd-92c7-71a556385f83";
+    { device = "/dev/disk/by-uuid/7276d5ea-40cf-43d9-89b8-5931e9331fd9";
       fsType = "ext4";
     };
 
+  boot.initrd.luks.devices."luks-016ea211-ae07-4538-85ac-42e28b76a0ae".device = "/dev/disk/by-uuid/016ea211-ae07-4538-85ac-42e28b76a0ae";
+
   fileSystems."/boot" =
-    { device = "/dev/disk/by-uuid/C390-3447";
+    { device = "/dev/disk/by-uuid/676E-ADBB";
       fsType = "vfat";
       options = [ "fmask=0077" "dmask=0077" ];
     };
 
-  swapDevices = [ ];
+  swapDevices = [ 
+    { 
+      device = "/dev/disk/by-uuid/067c3f2f-f75f-4844-b712-46e7c58392a8"; 
+    }
+  ];
 
   # Enables DHCP on each ethernet and wireless interface. In case of scripted networking
   # (the default) this is the recommended approach. When using systemd-networkd it's
   # still possible to use this option, but it's recommended to use it in conjunction
   # with explicit per-interface declarations with `networking.interfaces.<interface>.useDHCP`.
   networking.useDHCP = lib.mkDefault true;
-  # networking.interfaces.enp0s3.useDHCP = lib.mkDefault true;
-  # networking.interfaces.enp0s8.useDHCP = lib.mkDefault true;
+  # networking.interfaces.wlp0s20f3.useDHCP = lib.mkDefault true;
 
   nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
-  virtualisation.virtualbox.guest.enable = true;
-  # hardware.cpu.intel.updateMicrocode = lib.mkDefault true;
+  hardware.cpu.intel.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;
 }

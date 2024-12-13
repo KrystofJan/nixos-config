@@ -1,15 +1,13 @@
-# Edit this configuration file to define what should be installed on
-# your system.  Help is available in the configuration.nix(5) man page
-# and in the NixOS manual (accessible by running ‘nixos-help’).
-
 { config, pkgs, inputs, ... }:
 
 {
   imports =
-    [ # Include the results of the hardware scan.
+    [
         ./terminal/terminal.nix
         ./wayland/window-manager.nix 
-        ../../main-user.nix
+        # ./i3/window-manager.nix
+        ./wayland/login-manager.nix
+        ../../main-user.nix 
         ./hardware-configuration.nix
         inputs.home-manager.nixosModules.default
     ];
@@ -18,8 +16,15 @@
   main-user.userName = "zahry";
 
   # Bootloader.
-  boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
+  boot.loader.grub = {
+    enable = true;
+    devices = ["nodev"];
+    efiSupport = true;
+    useOSProber = true;
+  };
+
+  hardware.i2c.enable = true;
 
   # SWAP
   swapDevices = [{
@@ -68,11 +73,8 @@
   security.polkit.enable = true;
 
   fonts.packages = with pkgs; [
-    # TODO: Deal with nerdfonts
     nerd-fonts.fira-code
     nerd-fonts.martian-mono
-    # nerd-fonts.DroidSansMono
-    # nerd-fonts.MartianMono
     jetbrains-mono
   ];
 
@@ -82,7 +84,6 @@
   users.extraGroups.docker.members = [ "zahry" ];
 
 
-  # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
     libnotify
@@ -125,27 +126,6 @@
 
   services.gnome.gnome-keyring.enable = true;
 
-    systemd.user.services.kanshi = {
-        description = "kanshi daemon";
-        environment = {
-            WAYLAND_DISPLAY = "wayland-1";
-            DISPLAY = ":0";
-        };
-        serviceConfig = {
-            Type = "simple";
-            ExecStart = ''${pkgs.kanshi}/bin/kanshi -c kanshi'';
-        };
-    };
-
-  security.rtkit.enable = true;
-  services.pipewire = {
-	enable = true;
-	alsa.enable = true;
-	alsa.support32Bit = true;
-	pulse.enable = true;
-	jack.enable = true;
-  };
-
   programs.git = {
     enable = true;
   };
@@ -163,17 +143,5 @@
   # Enable the OpenSSH daemon.
   # services.openssh.enable = true;
 
-  # Open ports in the firewall.
-  # networking.firewall.allowedTCPPorts = [ ... ];
-  # networking.firewall.allowedUDPPorts = [ ... ];
-  # Or disable the firewall altogether.
-  # networking.firewall.enable = false;
-
-  # This value determines the NixOS release from which the default
-  # settings for stateful data, like file locations and database versions
-  # on your system were taken. It‘s perfectly fine and recommended to leave
-  # this value at the release version of the first install of this system.
-  # Before changing this value read the documentation for this option
-  # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
-  system.stateVersion = "23.11"; # Did you read the comment?
+  system.stateVersion = "23.11";
 }

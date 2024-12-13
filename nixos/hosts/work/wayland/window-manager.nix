@@ -44,6 +44,8 @@ in
     grim
     slurp
     wl-clipboard
+    gammastep    
+    geoclue2
     capitaine-cursors
     vulkan-tools
     xdg-desktop-portal
@@ -56,9 +58,6 @@ in
     wlr.enable = true;
     extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
   };
-
-
-
 
     hardware.graphics = {
         enable = true;
@@ -98,4 +97,39 @@ in
     environment.sessionVariables = {
         LIBVA_DRIVER_NAME="iHD";
     };
+
+    services.geoclue2.enable = true;
+    services.avahi = {
+        enable = true;
+        nssmdns = true; # Optional: if you need Avahi for name resolution.
+    };
+
+environment.etc."xdg/geoclue/geoclue.conf".text = ''
+  [service-settings]
+  service-timeout = 0
+'';
+
+
+    programs.light.enable = true;
+
+    # systemd.user.services.kanshi = {
+    #     description = "kanshi daemon";
+    #     environment = {
+    #         WAYLAND_DISPLAY = "wayland-1";
+    #         DISPLAY = ":0";
+    #     };
+    #     serviceConfig = {
+    #         Type = "simple";
+    #         ExecStart = ''${pkgs.kanshi}/bin/kanshi -c kanshi'';
+    #     };
+    # };
+      security.rtkit.enable = true;
+  services.pipewire = {
+	enable = true;
+	alsa.enable = true;
+	alsa.support32Bit = true;
+	pulse.enable = true;
+	jack.enable = true;
+  };
+
 }

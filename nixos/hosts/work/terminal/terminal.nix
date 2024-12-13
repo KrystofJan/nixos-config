@@ -24,6 +24,7 @@
     act        
     cowsay
     lazygit
+    starship
   ];
   
   programs.zsh.enable = true;
