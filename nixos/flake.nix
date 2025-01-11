@@ -4,15 +4,14 @@
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
     hyprland.url = "github:hyprwm/Hyprland";
-        zen-browser.url = "github:MarceColl/zen-browser-flake";
-
+    zen-browser.url = "github:MarceColl/zen-browser-flake";
     home-manager = {
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
     };
   };
 
-  outputs = { self, nixpkgs, ... }@inputs: 
+  outputs = { self, nixpkgs, ghostty, ... }@inputs: 
     let 
         system = "x86_64-linux";
         pkgs = nixpkgs.legacyPackages.${system};

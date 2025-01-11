@@ -75,20 +75,9 @@
   #     local all       all     trust
   #   '';
   # };
-	
-  # Define a user account. Don't forget to set a password with ‘passwd’.
-#  users.users.zahry = {
- #   isNormalUser = true;
-  #  description = "Jan-Krystof Zahrandik";
-   # extraGroups = [ "networkmanager" "wheel" ];
-    #packages = with pkgs; [];
-  #};
 
   # Allow unfree packages
   nixpkgs.config.allowUnfree = true;
-
-    
-
 
   home-manager = {
     extraSpecialArgs = {inherit inputs;};
@@ -100,15 +89,6 @@
   # Hyprland
   programs.hyprland.enable = true;
   # programs.hyprland.package = inputs.hyprland.packages."${pkgs.system}".hyprland;
-
-
-  fonts.packages = with pkgs; [
-    # TODO: Fix nerdfonts
-    # nerd-fonts.FiraCode
-    # nerd-fonts.DroidSansMono
-    # nerd-fonts.MartianMono
-    jetbrains-mono
-  ];
 
   # Set up zsh
   programs.zsh.enable = true;
@@ -125,8 +105,7 @@
   # $ nix search wget
   environment.systemPackages = with pkgs; [
     
-
-  inputs.zen-browser.packages."${system}".specific
+      inputs.zen-browser.packages."${system}".specific
 
 
     # DesktopEnv
@@ -137,8 +116,9 @@
     libnotify
     swww
     rofi-wayland
-    zsh-powerlevel10k
+    starship
     alacritty
+    kitty
     pavucontrol
     wev
     wl-clipboard
@@ -147,6 +127,7 @@
     imv
 
     # Cli
+    ghostty
     zellij
     fzf
     fd
@@ -211,7 +192,6 @@
   	extraPortals = [pkgs.xdg-desktop-portal-gtk];
   };
 
-  sound.enable = true;
   security.rtkit.enable = true;
   services.pipewire = {
 	enable = true;
@@ -221,9 +201,28 @@
 	jack.enable = true;
   };
 
+  services.greetd = {
+    enable = true;
+    vt = 3;
+    settings = {
+      initial_session = {
+        user = "zahry";
+        command = "Hyprland";
+      };
+      # ...    
+    };
+  };
+
+
   programs.git = {
     enable = true;
   };
+
+  fonts.packages = with pkgs; [
+    nerd-fonts.fira-code
+    nerd-fonts.martian-mono
+    jetbrains-mono
+  ];
 
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.
