@@ -7,18 +7,16 @@
 {
   imports =
     [ # Include the results of the hardware scan.
- 
         ../../main-user.nix
+        ../../modules/hyprland/hyprland.nix
+        ../../modules/bootloader/grub.nix
+        ../../modules/obs/obs.nix 
         ./hardware-configuration.nix
         inputs.home-manager.nixosModules.default
     ];
 
   main-user.enable = true;
   main-user.userName = "zahry";
-
-  # Bootloader.
-  boot.loader.systemd-boot.enable = true;
-  boot.loader.efi.canTouchEfiVariables = true;
 
   # SWAP
   swapDevices = [{
@@ -27,11 +25,6 @@
   }];
 
   networking.hostName = "perun"; # Define your hostname.
-  #  networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
-
-  # Configure network proxy if necessary
-  # networking.proxy.default = "http://user:password@proxy:port/";
-  # networking.proxy.noProxy = "127.0.0.1,localhost,internal.domain";
 
   # Enable networking
   networking.networkmanager.enable = true;
@@ -56,26 +49,6 @@
     LC_TIME = "cs_CZ.UTF-8";
   };
 
-  # Configure keymap in X11
-  services.xserver = {
-    enable = true;
-    videoDrivers = [ "amdgpu" ];
-    layout = "us";
-    displayManager.gdm.enable = true;
-    displayManager.gdm.wayland = true;
-    xkbVariant = ""; };
-
-  # NOTE: Using the docker one now
-  # services.postgresql = {
-  #   enable = true;
-  #   ensureDatabases = [ "mydatabase" ];
-  #   package = pkgs.postgresql_15;
-  #   authentication = pkgs.lib.mkOverride 10 ''
-  #     #type database  DBuser  auth-method
-  #     local all       all     trust
-  #   '';
-  # };
-
   # Allow unfree packages
   nixpkgs.config.allowUnfree = true;
 
@@ -85,10 +58,6 @@
       "zahry" = import ./home.nix;
     };
   };
-
-  # Hyprland
-  programs.hyprland.enable = true;
-  # programs.hyprland.package = inputs.hyprland.packages."${pkgs.system}".hyprland;
 
   # Set up zsh
   programs.zsh.enable = true;
@@ -100,32 +69,9 @@
   users.extraGroups.vboxusers.members = [ "zahry" ];
   users.extraGroups.docker.members = [ "zahry" ];
 
-
-  # List packages installed in system profile. To search, run:
-  # $ nix search wget
   environment.systemPackages = with pkgs; [
-    
-      inputs.zen-browser.packages."${system}".specific
-
-
-    # DesktopEnv
-    (pkgs.waybar.overrideAttrs(oldAttrs: {
-    	mesonFlags = oldAttrs.mesonFlags ++ ["-Dexperimental=true"];
-    }))
-    pkgs.dunst
-    libnotify
-    swww
-    rofi-wayland
-    starship
-    alacritty
-    kitty
-    pavucontrol
-    wev
-    wl-clipboard
-    imagemagick
-    brightnessctl
-    imv
-
+    inputs.zen-browser.packages.${pkgs.system}.specific
+    inputs.rose-pine-hyprcursor.packages.${pkgs.system}.default
     # Cli
     ghostty
     zellij
@@ -140,14 +86,8 @@
     neofetch
     yazi
     act        
-
-    # Functionality
-    networkmanagerapplet
-    grim
-    slurp
-    hyprlock
     ripgrep
-    
+
     # Apps
     pkgs.firefox
     discord
@@ -164,91 +104,15 @@
     neovim
     git
     gcc
-    cargo
-    rustc
-    rustup
     lazygit
     gnumake
-    typescript
-    python310
-    nodejs_22
     killall
-    python310Packages.pip
-    python310Packages.pipx
-    python310Packages.numpy
-    python310Packages.pyarrow
-    python310Packages.pytest
-    nodePackages_latest.ts-node
-    nodePackages_latest.nodemon    
     wget
-    pkgs.dotnetCorePackages.sdk_9_0
   ];
-
-
-
-
-  xdg.portal = { 
-	enable = true;
-  	extraPortals = [pkgs.xdg-desktop-portal-gtk];
-  };
-
-  security.rtkit.enable = true;
-  services.pipewire = {
-	enable = true;
-	alsa.enable = true;
-	alsa.support32Bit = true;
-	pulse.enable = true;
-	jack.enable = true;
-  };
-
-  services.greetd = {
-    enable = true;
-    vt = 3;
-    settings = {
-      initial_session = {
-        user = "zahry";
-        command = "Hyprland";
-      };
-      # ...    
-    };
-  };
-
 
   programs.git = {
     enable = true;
   };
 
-  fonts.packages = with pkgs; [
-    nerd-fonts.fira-code
-    nerd-fonts.martian-mono
-    jetbrains-mono
-  ];
-
-  # Some programs need SUID wrappers, can be configured further or are
-  # started in user sessions.
-  # programs.mtr.enable = true;
-  # programs.gnupg.agent = {
-  #   enable = true;
-  #   enableSSHSupport = true;
-  # };
-
-  # List services that you want to enable:
-
-  # Enable the OpenSSH daemon.
-  # services.openssh.enable = true;
-
-  # Open ports in the firewall.
-  # networking.firewall.allowedTCPPorts = [ ... ];
-  # networking.firewall.allowedUDPPorts = [ ... ];
-  # Or disable the firewall altogether.
-  # networking.firewall.enable = false;
-
-  # This value determines the NixOS release from which the default
-  # settings for stateful data, like file locations and database versions
-  # on your system were taken. It‘s perfectly fine and recommended to leave
-  # this value at the release version of the first install of this system.
-  # Before changing this value read the documentation for this option
-  # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
   system.stateVersion = "23.11"; # Did you read the comment?
-
 }

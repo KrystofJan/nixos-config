@@ -5,13 +5,14 @@
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
     hyprland.url = "github:hyprwm/Hyprland";
     zen-browser.url = "github:MarceColl/zen-browser-flake";
+    rose-pine-hyprcursor.url = "github:ndom91/rose-pine-hyprcursor";
     home-manager = {
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
     };
   };
 
-  outputs = { self, nixpkgs, ghostty, ... }@inputs: 
+  outputs = { self, nixpkgs, ... }@inputs: 
     let 
         system = "x86_64-linux";
         pkgs = nixpkgs.legacyPackages.${system};
