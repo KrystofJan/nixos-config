@@ -14,6 +14,7 @@
     starship
     alacritty
     kitty
+    ghostty
     pavucontrol
     wev
     wl-clipboard
@@ -66,9 +67,11 @@
   services.xserver = {
     enable = true;
     videoDrivers = [ "amdgpu" ];
-    layout = "us";
     displayManager.gdm.enable = true;
     displayManager.gdm.wayland = true;
-    xkbVariant = ""; 
+    xkb = {
+	variant = ""; 
+	layout = "us";
+    };
    };
 }

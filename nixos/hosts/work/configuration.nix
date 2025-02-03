@@ -106,13 +106,6 @@
     kanshi
     
     # Apps
-    firefox
-    discord
-    obsidian
-    spotify
-    slack
-    vscode
-    postman
     inputs.zen-browser.packages."${system}".specific
 
     # Dev

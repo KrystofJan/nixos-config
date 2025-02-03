@@ -23,7 +23,6 @@
               specialArgs = {inherit inputs;};
               modules = [
                 ./hosts/default/configuration.nix
-                inputs.home-manager.nixosModules.default
               ];
             };
 
@@ -31,7 +30,13 @@
               specialArgs = {inherit inputs;};
               modules = [
                 ./hosts/work/configuration.nix
-                inputs.home-manager.nixosModules.default
+              ];
+            };
+
+            veles = nixpkgs.lib.nixosSystem {
+              specialArgs = {inherit inputs;};
+              modules = [
+                ./hosts/veles/configuration.nix
               ];
             };
         };

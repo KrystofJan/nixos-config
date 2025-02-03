@@ -1,4 +1,4 @@
-{config, pkgs, ...}:
+{coworknfig, pkgs, ...}:
 
 {
   programs.neovim = {
