@@ -8,6 +8,7 @@
   imports =
     [ # Include the results of the hardware scan.
         ../../main-user.nix
+        ../../modules/must-haves/must-haves.nix
         ../../modules/hyprland/hyprland.nix
         ../../modules/bootloader/grub.nix
         ../../modules/obs/obs.nix 
