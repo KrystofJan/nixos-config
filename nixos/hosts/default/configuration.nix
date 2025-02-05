@@ -6,14 +6,13 @@
 
 {
   imports =
-    [ # Include the results of the hardware scan.
+    [
         ../../main-user.nix
         ../../modules/must-haves/must-haves.nix
         ../../modules/hyprland/hyprland.nix
         ../../modules/bootloader/grub.nix
         ../../modules/obs/obs.nix 
         ./hardware-configuration.nix
-        inputs.home-manager.nixosModules.default
     ];
 
   main-user.enable = true;
@@ -53,13 +52,6 @@
   # Allow unfree packages
   nixpkgs.config.allowUnfree = true;
 
-  home-manager = {
-    extraSpecialArgs = {inherit inputs;};
-    users = {
-      "zahry" = import ./home.nix;
-    };
-  };
-
   # Set up zsh
   programs.zsh.enable = true;
   users.defaultUserShell = pkgs.zsh;
@@ -73,24 +65,12 @@
   environment.systemPackages = with pkgs; [
     inputs.zen-browser.packages.${pkgs.system}.specific
     inputs.rose-pine-hyprcursor.packages.${pkgs.system}.default
+
     # Cli
     ghostty
-    zellij
-    fzf
-    fd
-    thefuck
-    zoxide
-    atuin
-    eza
-    bat
-    btop
-    neofetch
-    yazi
-    act        
-    ripgrep
 
     # Apps
-    pkgs.firefox
+    firefox
     discord
     obsidian
     spotify
@@ -102,7 +82,6 @@
 
     # Dev
     pkgs.vim 
-    neovim
     git
     gcc
     lazygit
@@ -115,5 +94,5 @@
     enable = true;
   };
 
-  system.stateVersion = "23.11"; # Did you read the comment?
+  system.stateVersion = "23.11";
 }

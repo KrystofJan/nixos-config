@@ -66,8 +66,6 @@
   users.extraGroups.docker.members = [ "zahry" ];
 
 
-  # List packages installed in system profile. To search, run:
-  # $ nix search wget
   environment.systemPackages = with pkgs; [
     inputs.zen-browser.packages."${system}".default
     firefox
