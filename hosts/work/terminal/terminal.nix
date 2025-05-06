@@ -1,7 +1,9 @@
-{ config, pkgs, lib, ... }:
-
-
 {
+  config,
+  pkgs,
+  lib,
+  ...
+}: {
   environment.systemPackages = with pkgs; [
     # Emulators
     alacritty
@@ -21,12 +23,12 @@
     btop
     neofetch
     yazi
-    act        
+    act
     cowsay
     lazygit
     starship
   ];
-  
+
   programs.zsh.enable = true;
   users.defaultUserShell = pkgs.zsh;
 }

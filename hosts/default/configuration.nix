@@ -1,28 +1,32 @@
-{ config, pkgs, inputs, ... }:
-
 {
-  imports =
-    [
-	../../modules/hosts/hosts.nix
-        ../../main-user.nix
-        ../../modules/must-haves/must-haves.nix
-        ../../modules/hyprland/hyprland.nix
-        ../../modules/bootloader/grub.nix
-        ../../modules/obs/obs.nix 
-        ./hardware-configuration.nix
-	./gc/gc.nix
-	./virtualization/docker.nix
-	./virtualization/virtualbox.nix
-    ];
+  config,
+  pkgs,
+  inputs,
+  ...
+}: {
+  imports = [
+    ../../modules/hosts/hosts.nix
+    ../../main-user.nix
+    ../../modules/must-haves/must-haves.nix
+    ../../modules/hyprland/hyprland.nix
+    ../../modules/bootloader/grub.nix
+    ../../modules/obs/obs.nix
+    ./hardware-configuration.nix
+    ./gc/gc.nix
+    ./virtualization/docker.nix
+    ./virtualization/virtualbox.nix
+  ];
 
   main-user.enable = true;
   main-user.userName = "zahry";
 
   # SWAP
-  swapDevices = [{
-    device = "/swap";
-    size = 16 * 1024; #16GB
-  }];
+  swapDevices = [
+    {
+      device = "/swap";
+      size = 16 * 1024; #16GB
+    }
+  ];
 
   networking.hostName = "perun";
 
@@ -70,13 +74,14 @@
     postman
 
     # Dev
-    pkgs.vim 
+    pkgs.vim
     git
     gcc
     lazygit
     gnumake
     killall
     wget
+    jetbrains.datagrip
   ];
 
   programs.git = {

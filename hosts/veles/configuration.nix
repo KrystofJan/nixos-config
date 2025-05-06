@@ -1,30 +1,34 @@
 # Edit this configuration file to define what should be installed on
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
-
-{ config, pkgs, inputs, ... }:
-
 {
-  imports =
-    [ # Include the results of the hardware scan.
- 
-        ../../modules/hyprland/hyprland.nix
-        ../../modules/bootloader/grub.nix
-        ../../main-user.nix
-        ./hardware-configuration.nix
-    ];
+  config,
+  pkgs,
+  inputs,
+  ...
+}: {
+  imports = [
+    # Include the results of the hardware scan.
+
+    ../../modules/hyprland/hyprland.nix
+    ../../modules/bootloader/grub.nix
+    ../../main-user.nix
+    ./hardware-configuration.nix
+  ];
 
   main-user.enable = true;
   main-user.userName = "zahry";
 
   # SWAP
-  swapDevices = [{
-    device = "/swap";
-    size = 16 * 1024; #16GB
-  }];
+  swapDevices = [
+    {
+      device = "/swap";
+      size = 16 * 1024; #16GB
+    }
+  ];
 
   networking.hostName = "veles"; # Define your hostname.
-  networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
+  networking.wireless.enable = true; # Enables wireless support via wpa_supplicant.
 
   # Configure network proxy if necessary
   # networking.proxy.default = "http://user:password@proxy:port/";
@@ -59,19 +63,17 @@
   programs.zsh.enable = true;
   users.defaultUserShell = pkgs.zsh;
 
-
   virtualisation.virtualbox.host.enable = true;
   virtualisation.docker.enable = true;
-  users.extraGroups.vboxusers.members = [ "zahry" ];
-  users.extraGroups.docker.members = [ "zahry" ];
-
+  users.extraGroups.vboxusers.members = ["zahry"];
+  users.extraGroups.docker.members = ["zahry"];
 
   environment.systemPackages = with pkgs; [
     inputs.zen-browser.packages."${system}".default
     firefox
 
     # Dev
-    pkgs.vim 
+    pkgs.vim
     git
     gcc
     wget

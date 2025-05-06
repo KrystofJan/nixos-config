@@ -1,4 +1,4 @@
 {
   virtualisation.virtualbox.host.enable = true;
-  users.extraGroups.vboxusers.members = [ "zahry" ];
+  users.extraGroups.vboxusers.members = ["zahry"];
 }

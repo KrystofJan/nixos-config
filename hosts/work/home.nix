@@ -1,6 +1,8 @@
-{ config, pkgs, ... }:
-
 {
+  config,
+  pkgs,
+  ...
+}: {
   # imports = [
   #     ../../main-user.nix
   # ];
@@ -87,7 +89,6 @@
   #   };
   # };
 
-
   programs.neovim = {
     enable = true;
     viAlias = true;
@@ -95,49 +96,48 @@
     vimdiffAlias = true;
 
     extraPackages = with pkgs; [
-        # lsps
-        lua-language-server
-        nil
-        rust-analyzer
-        gopls
-        nodePackages_latest.typescript-language-server
-        csharp-ls
+      # lsps
+      lua-language-server
+      nil
+      rust-analyzer
+      gopls
+      nodePackages_latest.typescript-language-server
+      csharp-ls
 
-        #formatters
-        stylua
-        rustfmt
-        prettierd
+      #formatters
+      stylua
+      rustfmt
+      prettierd
     ];
 
     plugins = with pkgs.vimPlugins; [
-        comment-nvim
-        friendly-snippets
-        nvim-lspconfig
-        gruvbox-nvim
-        base16-nvim
-        gitsigns-nvim
-        lazygit-nvim
-        which-key-nvim
-        telescope-nvim
-        telescope-fzf-native-nvim 
-        plenary-nvim
-        telescope-ui-select-nvim
-        nvim-web-devicons
-        fidget-nvim
-        neodev-nvim
-        conform-nvim
-        nvim-cmp
-        luasnip
-        cmp_luasnip
-        cmp-nvim-lsp
-        cmp-path
-        todo-comments-nvim
-        mini-nvim
-        nvim-treesitter.withAllGrammars
-        lualine-nvim
-        oil-nvim
-	];
-
+      comment-nvim
+      friendly-snippets
+      nvim-lspconfig
+      gruvbox-nvim
+      base16-nvim
+      gitsigns-nvim
+      lazygit-nvim
+      which-key-nvim
+      telescope-nvim
+      telescope-fzf-native-nvim
+      plenary-nvim
+      telescope-ui-select-nvim
+      nvim-web-devicons
+      fidget-nvim
+      neodev-nvim
+      conform-nvim
+      nvim-cmp
+      luasnip
+      cmp_luasnip
+      cmp-nvim-lsp
+      cmp-path
+      todo-comments-nvim
+      mini-nvim
+      nvim-treesitter.withAllGrammars
+      lualine-nvim
+      oil-nvim
+    ];
   };
 
   # Let Home Manager install and manage itself.

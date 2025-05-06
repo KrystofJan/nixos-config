@@ -1,16 +1,18 @@
-{ config, pkgs, inputs, ... }:
-
 {
-  imports =
-    [
-        ./terminal/terminal.nix
-        ./wayland/window-manager.nix 
-        # ./i3/window-manager.nix
-        ./wayland/login-manager.nix
-        ../../main-user.nix 
-        ./hardware-configuration.nix
-        inputs.home-manager.nixosModules.default
-    ];
+  config,
+  pkgs,
+  inputs,
+  ...
+}: {
+  imports = [
+    ./terminal/terminal.nix
+    ./wayland/window-manager.nix
+    # ./i3/window-manager.nix
+    ./wayland/login-manager.nix
+    ../../main-user.nix
+    ./hardware-configuration.nix
+    inputs.home-manager.nixosModules.default
+  ];
 
   main-user.enable = true;
   main-user.userName = "zahry";
@@ -27,10 +29,12 @@
   hardware.i2c.enable = true;
 
   # SWAP
-  swapDevices = [{
-    device = "/swap";
-    size = 16 * 1024; #16GB
-  }];
+  swapDevices = [
+    {
+      device = "/swap";
+      size = 16 * 1024; #16GB
+    }
+  ];
 
   networking.hostName = "chernobog"; # Define your hostname.
 
@@ -80,9 +84,8 @@
 
   virtualisation.virtualbox.host.enable = true;
   virtualisation.docker.enable = true;
-  users.extraGroups.vboxusers.members = [ "zahry" ];
-  users.extraGroups.docker.members = [ "zahry" ];
-
+  users.extraGroups.vboxusers.members = ["zahry"];
+  users.extraGroups.docker.members = ["zahry"];
 
   # $ nix search wget
   environment.systemPackages = with pkgs; [
@@ -104,12 +107,12 @@
     ripgrep
     read-edid
     kanshi
-    
+
     # Apps
     inputs.zen-browser.packages."${system}".specific
 
     # Dev
-    vim 
+    vim
     neovim
     git
     gcc

@@ -1,10 +1,14 @@
-{ config, pkgs, lib, ... }:
 {
+  config,
+  pkgs,
+  lib,
+  ...
+}: {
   programs.hyprland.enable = true;
   # programs.hyprland.package = inputs.hyprland.packages."${pkgs.system}".hyprland;
   environment.systemPackages = with pkgs; [
-    (pkgs.waybar.overrideAttrs(oldAttrs: {
-        mesonFlags = oldAttrs.mesonFlags ++ ["-Dexperimental=true"];
+    (pkgs.waybar.overrideAttrs (oldAttrs: {
+      mesonFlags = oldAttrs.mesonFlags ++ ["-Dexperimental=true"];
     }))
 
     pkgs.dunst
@@ -22,6 +26,9 @@
     brightnessctl
     imv
 
+    nemo-with-extensions
+    nemo
+
     networkmanagerapplet
     grim
     slurp
@@ -30,18 +37,18 @@
     hypridle
   ];
 
-  xdg.portal = { 
-	enable = true;
-  	extraPortals = [pkgs.xdg-desktop-portal-gtk];
+  xdg.portal = {
+    enable = true;
+    extraPortals = [pkgs.xdg-desktop-portal-gtk];
   };
 
   security.rtkit.enable = true;
   services.pipewire = {
-	enable = true;
-	alsa.enable = true;
-	alsa.support32Bit = true;
-	pulse.enable = true;
-	jack.enable = true;
+    enable = true;
+    alsa.enable = true;
+    alsa.support32Bit = true;
+    pulse.enable = true;
+    jack.enable = true;
   };
 
   services.greetd = {
@@ -66,12 +73,23 @@
   # Configure keymap in X11
   services.xserver = {
     enable = true;
-    videoDrivers = [ "amdgpu" ];
+    videoDrivers = ["amdgpu"];
     displayManager.gdm.enable = true;
     displayManager.gdm.wayland = true;
     xkb = {
-	variant = ""; 
-	layout = "us";
+      variant = "";
+      layout = "us";
     };
-   };
+  };
+  # xdg.desktopEntries.nemo = {
+  #     name = "Nemo";
+  #     exec = "${pkgs.nemo-with-extensions}/bin/nemo";
+  # };
+  # xdg.mimeApps = {
+  #     enable = true;
+  #     defaultApplications = {
+  #         "inode/directory" = [ "nemo.desktop" ];
+  #         "application/x-gnome-saved-search" = [ "nemo.desktop" ];
+  #     };
+  # };
 }

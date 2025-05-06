@@ -2,14 +2,15 @@
 # Edit this configuration file to define what should be installed on
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
-
-{ config, pkgs, ... }:
-
 {
+  config,
+  pkgs,
+  ...
+}: {
   # Enable the X11 windowing system.
   services.xserver = {
     enable = true;
-    desktopManager = {xterm.enable=false;};
+    desktopManager = {xterm.enable = false;};
     displayManager = {
       defaultSession = "none+i3";
     };
@@ -18,8 +19,8 @@
       extraPackages = with pkgs; [
         dmenu
         i3status
-	i3lock
-	i3blocks
+        i3lock
+        i3blocks
       ];
     };
   };
@@ -52,18 +53,17 @@
     #media-session.enable = true;
   };
 
-
   environment.systemPackages = with pkgs; [
-	cmatrix
-	xfce.thunar
-	htop
-	xfce.ristretto
-	feh
-	lxappearance
-	zip
-	jq
-	unzip
-	qemu_kvm
+    cmatrix
+    xfce.thunar
+    htop
+    xfce.ristretto
+    feh
+    lxappearance
+    zip
+    jq
+    unzip
+    qemu_kvm
   ];
   services.gvfs.enable = true; # Mount, trash, and other functionalities
   services.tumbler.enable = true; # Thumbnail support for images
@@ -71,17 +71,17 @@
   services.picom = {
     enable = true;
     fade = true;
-#    vSync = true;
+    #    vSync = true;
     shadow = true;
-    fadeDelta = 4 ;
+    fadeDelta = 4;
     inactiveOpacity = 0.8;
     activeOpacity = 1;
-#    backend = "glx";
+    #    backend = "glx";
     settings = {
       blur = {
-	#method = "dual_kawase";
-#	background = true;
-	strength = 5;
+        #method = "dual_kawase";
+        #	background = true;
+        strength = 5;
       };
     };
   };

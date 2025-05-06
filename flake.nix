@@ -48,7 +48,10 @@
     };
 
     devShells.${system}.default = pkgs.mkShell {
-      packages = [pkgs.nixd alejandra.defaultPackage.${system}];
+      packages = [
+        pkgs.nixd
+        alejandra.defaultPackage.${system}
+      ];
 
       shellHook = ''
         echo "  Nix development flake   "
