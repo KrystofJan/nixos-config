@@ -1,11 +1,13 @@
 {
   config,
+  lib,
   pkgs,
   inputs,
   ...
 }: {
   imports = [
-    ../../modules/hosts/hosts.nix
+    # ../../modules/hosts/hosts.nix
+
     ../../main-user.nix
     ../../modules/must-haves/must-haves.nix
     ../../modules/hyprland/hyprland.nix
@@ -28,9 +30,15 @@
     }
   ];
 
-  networking.hostName = "perun";
-
-  networking.networkmanager.enable = true;
+  networking = {
+    hostName = "perun";
+    networkmanager = {
+      enable = true;
+      wifi = {
+        backend = "iwd";
+      };
+    };
+  };
 
   nix.settings.experimental-features = ["nix-command" "flakes"];
 
@@ -51,7 +59,14 @@
   };
 
   # Allow unfree packages
-  nixpkgs.config.allowUnfree = true;
+  nixpkgs.config = {
+    allowUnfree = true;
+    allowUnfreePredicate = pkg:
+      builtins.elem (lib.getName pkg) [
+        "jetbrains.datagrip"
+        "spotify"
+      ];
+  };
 
   # Set up zsh
   programs.zsh.enable = true;
@@ -61,7 +76,7 @@
     inputs.zen-browser.packages.${pkgs.system}.default
     inputs.rose-pine-hyprcursor.packages.${pkgs.system}.default
 
-    # Cli
+    # Term
     ghostty
 
     # Apps
@@ -72,16 +87,16 @@
     slack
     vscode
     postman
+    ffmpeg
 
     # Dev
     pkgs.vim
     git
     gcc
-    lazygit
     gnumake
     killall
     wget
-    jetbrains.datagrip
+    # jetbrains.datagrip
   ];
 
   programs.git = {

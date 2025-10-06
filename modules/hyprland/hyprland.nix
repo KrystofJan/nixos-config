@@ -14,7 +14,7 @@
     pkgs.dunst
     libnotify
     swww
-    rofi-wayland
+    rofi
     starship
     alacritty
     kitty
@@ -43,6 +43,7 @@
   };
 
   security.rtkit.enable = true;
+
   services.pipewire = {
     enable = true;
     alsa.enable = true;
@@ -53,7 +54,6 @@
 
   services.greetd = {
     enable = true;
-    vt = 3;
 
     settings = rec {
       initial_session = {
@@ -74,22 +74,14 @@
   services.xserver = {
     enable = true;
     videoDrivers = ["amdgpu"];
-    displayManager.gdm.enable = true;
-    displayManager.gdm.wayland = true;
     xkb = {
       variant = "";
       layout = "us";
     };
   };
-  # xdg.desktopEntries.nemo = {
-  #     name = "Nemo";
-  #     exec = "${pkgs.nemo-with-extensions}/bin/nemo";
-  # };
-  # xdg.mimeApps = {
-  #     enable = true;
-  #     defaultApplications = {
-  #         "inode/directory" = [ "nemo.desktop" ];
-  #         "application/x-gnome-saved-search" = [ "nemo.desktop" ];
-  #     };
-  # };
+
+  services.displayManager.gdm = {
+    enable = true;
+    wayland = true;
+  };
 }
