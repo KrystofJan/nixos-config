@@ -29,6 +29,10 @@
     nemo-with-extensions
     nemo
 
+    # USB automounting support
+    udisks
+    udiskie
+
     networkmanagerapplet
     grim
     slurp
@@ -42,46 +46,46 @@
     extraPortals = [pkgs.xdg-desktop-portal-gtk];
   };
 
-  security.rtkit.enable = true;
-
-  services.pipewire = {
-    enable = true;
-    alsa.enable = true;
-    alsa.support32Bit = true;
-    pulse.enable = true;
-    jack.enable = true;
-  };
-
-  services.greetd = {
-    enable = true;
-
-    settings = rec {
-      initial_session = {
-        user = "zahry";
-        command = "Hyprland";
-      };
-      default_session = initial_session;
-    };
-  };
-
   fonts.packages = with pkgs; [
     nerd-fonts.fira-code
     nerd-fonts.martian-mono
     jetbrains-mono
   ];
 
-  # Configure keymap in X11
-  services.xserver = {
-    enable = true;
-    videoDrivers = ["amdgpu"];
-    xkb = {
-      variant = "";
-      layout = "us";
-    };
-  };
+  security.rtkit.enable = true;
 
-  services.displayManager.gdm = {
-    enable = true;
-    wayland = true;
+  services = {
+    pipewire = {
+      enable = true;
+      alsa.enable = true;
+      alsa.support32Bit = true;
+      pulse.enable = true;
+      jack.enable = true;
+    };
+
+    greetd = {
+      enable = true;
+      settings = rec {
+        initial_session = {
+          user = "zahry";
+          command = "Hyprland";
+        };
+        default_session = initial_session;
+      };
+    };
+
+    xserver = {
+      enable = true;
+      videoDrivers = ["amdgpu"];
+      xkb = {
+        variant = "";
+        layout = "us";
+      };
+    };
+
+    displayManager.gdm = {
+      enable = true;
+      wayland = true;
+    };
   };
 }

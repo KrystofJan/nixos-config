@@ -12,6 +12,7 @@
 
     ../../modules/hyprland/hyprland.nix
     ../../modules/bootloader/grub.nix
+    ../../modules/usb-notifications/usb-notifications.nix
     ../../main-user.nix
     ./hardware-configuration.nix
   ];

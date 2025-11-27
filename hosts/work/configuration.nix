@@ -11,6 +11,7 @@
     ./wayland/login-manager.nix
     ../../main-user.nix
     ./hardware-configuration.nix
+    ../../modules/usb-notifications/usb-notifications.nix
     inputs.home-manager.nixosModules.default
   ];
 

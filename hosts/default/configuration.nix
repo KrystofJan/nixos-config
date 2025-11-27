@@ -13,6 +13,7 @@
     ../../modules/hyprland/hyprland.nix
     ../../modules/bootloader/grub.nix
     ../../modules/obs/obs.nix
+    # ../../modules/usb-notifications/usb-notifications.nix  # Fixed but disabled for now
     ./hardware-configuration.nix
     ./gc/gc.nix
     ./virtualization/docker.nix
@@ -29,6 +30,47 @@
       size = 16 * 1024; #16GB
     }
   ];
+
+  # USB Automounting Configuration
+  services.udisks2 = {
+    enable = true;
+    mountOnMedia = true;
+  };
+
+  # Enable automatic mounting of removable media
+  services.devmon.enable = true;
+
+  # Enable polkit for USB automounting
+  security.polkit.enable = true;
+
+  # Add polkit rules for USB mounting
+  security.polkit.extraConfig = ''
+    polkit.addRule(function(action, subject) {
+        if (action.id == "org.freedesktop.udisks2.filesystem-mount-system" ||
+            action.id == "org.freedesktop.udisks2.filesystem-mount" ||
+            action.id == "org.freedesktop.udisks2.filesystem-unmount-system" ||
+            action.id == "org.freedesktop.udisks2.filesystem-unmount") {
+            if (subject.isInGroup("storage") || subject.isInGroup("wheel")) {
+                return polkit.Result.YES;
+            }
+        }
+    });
+  '';
+
+  # Ensure udisks2 service starts automatically
+  systemd.services.udisks2 = {
+    wantedBy = [ "multi-user.target" ];
+  };
+
+  # Add udev rules for USB device permissions
+  services.udev.extraRules = ''
+    # Set proper permissions for USB devices
+    SUBSYSTEM=="usb", MODE="0664", GROUP="storage"
+    SUBSYSTEM=="block", SUBSYSTEMS=="usb", MODE="0664", GROUP="storage"
+
+    # Notify desktop environment about USB device changes
+    SUBSYSTEM=="block", KERNEL=="sd[a-z][0-9]", ACTION=="add", TAG+="systemd", ENV{SYSTEMD_WANTS}+="udisks2.service"
+  '';
 
   networking = {
     hostName = "perun";
@@ -88,6 +130,7 @@
     vscode
     postman
     ffmpeg
+    nemo-with-extensions
 
     # Dev
     pkgs.vim
@@ -98,6 +141,9 @@
     wget
     # jetbrains.datagrip
   ];
+
+  # Enable gvfs for USB automounting in desktop environments
+  services.gvfs.enable = true;
 
   programs.git = {
     enable = true;

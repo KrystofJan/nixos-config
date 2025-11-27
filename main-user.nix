@@ -21,7 +21,7 @@ in {
     users.users.${cfg.userName} = {
       isNormalUser = true;
       description = "Jan-Krystof Zahradnik";
-      extraGroups = ["networkmanager" "wheel" "video" "i2c"];
+      extraGroups = ["networkmanager" "wheel" "video" "i2c" "storage" "disk"];
       shell = pkgs.zsh;
       packages = with pkgs; [];
     };
