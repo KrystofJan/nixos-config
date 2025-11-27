@@ -10,7 +10,9 @@
 
     ../../main-user.nix
     ../../modules/must-haves/must-haves.nix
-    ../../modules/hyprland/hyprland.nix
+    # ../../modules/wayland/hyprland.nix
+    ../../modules/wayland/base.nix
+    ../../modules/wayland/mangowc.nix
     ../../modules/bootloader/grub.nix
     ../../modules/obs/obs.nix
     # ../../modules/usb-notifications/usb-notifications.nix  # Fixed but disabled for now
@@ -59,7 +61,7 @@
 
   # Ensure udisks2 service starts automatically
   systemd.services.udisks2 = {
-    wantedBy = [ "multi-user.target" ];
+    wantedBy = ["multi-user.target"];
   };
 
   # Add udev rules for USB device permissions
@@ -139,6 +141,8 @@
     gnumake
     killall
     wget
+
+    networkmanagerapplet
     # jetbrains.datagrip
   ];
 

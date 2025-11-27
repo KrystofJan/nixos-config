@@ -13,11 +13,16 @@
     };
     alejandra.url = "github:kamadorueda/alejandra/3.1.0";
     alejandra.inputs.nixpkgs.follows = "nixpkgs";
+    mangowc = {
+      url = "github:DreamMaoMao/mangowc";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs = {
     self,
     nixpkgs,
+    mangowc,
     alejandra,
     ...
   } @ inputs: let
@@ -29,6 +34,7 @@
         specialArgs = {inherit inputs;};
         modules = [
           ./hosts/default/configuration.nix
+          mangowc.nixosModules.mango
         ];
       };
 

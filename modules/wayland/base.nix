@@ -1,11 +1,4 @@
-{
-  config,
-  pkgs,
-  lib,
-  ...
-}: {
-  programs.hyprland.enable = true;
-  # programs.hyprland.package = inputs.hyprland.packages."${pkgs.system}".hyprland;
+{pkgs, ...}: {
   environment.systemPackages = with pkgs; [
     (pkgs.waybar.overrideAttrs (oldAttrs: {
       mesonFlags = oldAttrs.mesonFlags ++ ["-Dexperimental=true"];
@@ -33,12 +26,8 @@
     udisks
     udiskie
 
-    networkmanagerapplet
     grim
     slurp
-    hyprlock
-    hyprcursor
-    hypridle
   ];
 
   xdg.portal = {
@@ -61,17 +50,6 @@
       alsa.support32Bit = true;
       pulse.enable = true;
       jack.enable = true;
-    };
-
-    greetd = {
-      enable = true;
-      settings = rec {
-        initial_session = {
-          user = "zahry";
-          command = "Hyprland";
-        };
-        default_session = initial_session;
-      };
     };
 
     xserver = {

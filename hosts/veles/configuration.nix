@@ -10,7 +10,7 @@
   imports = [
     # Include the results of the hardware scan.
 
-    ../../modules/hyprland/hyprland.nix
+    ../../modules/wayland/hyprland.nix
     ../../modules/bootloader/grub.nix
     ../../modules/usb-notifications/usb-notifications.nix
     ../../main-user.nix
