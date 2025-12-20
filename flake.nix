@@ -51,6 +51,13 @@
           ./hosts/veles/configuration.nix
         ];
       };
+
+      radegast = nixpkgs.lib.nixosSystem {
+        specialArgs = {inherit inputs;};
+        modules = [
+          ./hosts/radegast/configuration.nix
+        ];
+      };
     };
 
     devShells.${system}.default = pkgs.mkShell {

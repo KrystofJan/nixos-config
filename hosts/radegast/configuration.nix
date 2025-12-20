@@ -5,16 +5,12 @@
 { config, pkgs, ... }:
 
 {
-  imports =
-    [ # Include the results of the hardware scan.
-      ./hardware-configuration.nix
-    ];
+  imports = [
+    ../../modules/bootloader/grub.nix
+    ./hardware-configuration.nix
+  ];
 
-  # Bootloader.
-  boot.loader.systemd-boot.enable = true;
-  boot.loader.efi.canTouchEfiVariables = true;
-
-  networking.hostName = "nixos"; # Define your hostname.
+  networking.hostName = "radegast"; # Define your hostname.
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
 
   # Configure network proxy if necessary
@@ -23,7 +19,7 @@
 
   # Enable networking
   networking.networkmanager.enable = true;
-nix.settings.experimental-features = ["nix-command" "flakes"];
+  nix.settings.experimental-features = ["nix-command" "flakes"];
   # Set your time zone.
   time.timeZone = "Europe/Prague";
 
@@ -42,30 +38,39 @@ nix.settings.experimental-features = ["nix-command" "flakes"];
     LC_TIME = "cs_CZ.UTF-8";
   };
 
-  # Configure keymap in X11
-  services.xserver.xkb = {
-    layout = "us";
-    variant = "";
-  };
-
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.bielobog = {
     isNormalUser = true;
     description = "bielobog";
     extraGroups = [ "networkmanager" "wheel" ];
     packages = with pkgs; [];
+    openssh.authorizedKeys.keys = [
+        "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIEUf/tpXgOr7UCC4F/dV+yS8vhmF07LQns+EW7meVpTp jendazah@gmail.com"
+    ];
   };
 
   # Enable automatic login for the user.
+  services.logind.lidSwitchExternalPower = "ignore";
   services.getty.autologinUser = "bielobog";
+
+  programs.zsh.enable = true;
+  users.defaultUserShell = pkgs.zsh;
 
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
-    vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
-    git  
-#  wget
+    vim
+    git
+    gcc
+    gnumake
+    killall
+    wget
   ];
+
+  programs.git = {
+    enable = true;
+  };
+
 
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.
@@ -78,7 +83,20 @@ nix.settings.experimental-features = ["nix-command" "flakes"];
   # List services that you want to enable:
 
   # Enable the OpenSSH daemon.
-  # services.openssh.enable = true;
+services.openssh = {
+  enable = true;
+  ports = [ 22 ];
+
+  settings = {
+    PasswordAuthentication = false;
+    KbdInteractiveAuthentication = false;
+    PubkeyAuthentication = true;
+
+    PermitRootLogin = "prohibit-password";
+    X11Forwarding = false;
+    UseDns = true;
+  };
+};
 
   # Open ports in the firewall.
   # networking.firewall.allowedTCPPorts = [ ... ];
