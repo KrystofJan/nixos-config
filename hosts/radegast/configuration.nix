@@ -1,16 +1,16 @@
 # Edit this configuration file to define what should be installed on
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
-
-{ config, pkgs, ... }:
-
 {
+  config,
+  pkgs,
+  ...
+}: {
   imports = [
     ../../modules/bootloader/grub.nix
     ./hardware-configuration.nix
   ];
 
-  networking.hostName = "radegast"; # Define your hostname.
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
 
   # Configure network proxy if necessary
@@ -18,7 +18,13 @@
   # networking.proxy.noProxy = "127.0.0.1,localhost,internal.domain";
 
   # Enable networking
-  networking.networkmanager.enable = true;
+  networking = {
+    hostName = "radegast"; # Define your hostname.
+    networkmanager.enable = true;
+    firewall.allowedTCPPorts = [22 53 80 443];
+    firewall.allowedUDPPorts = [53 67];
+  };
+
   nix.settings.experimental-features = ["nix-command" "flakes"];
   # Set your time zone.
   time.timeZone = "Europe/Prague";
@@ -42,11 +48,11 @@
   users.users.bielobog = {
     isNormalUser = true;
     description = "bielobog";
-    extraGroups = [ "networkmanager" "wheel" "docker" ];
+    extraGroups = ["networkmanager" "wheel" "docker"];
     packages = with pkgs; [];
     openssh.authorizedKeys.keys = [
-        "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIEUf/tpXgOr7UCC4F/dV+yS8vhmF07LQns+EW7meVpTp jendazah@gmail.com"
-        "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIPCOwTJ1hVXo3EONePvgsNxkUK45KWBjaNcmofDKkAiP jan.zahradnik@profiq.com"
+      "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIEUf/tpXgOr7UCC4F/dV+yS8vhmF07LQns+EW7meVpTp jendazah@gmail.com"
+      "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIPCOwTJ1hVXo3EONePvgsNxkUK45KWBjaNcmofDKkAiP jan.zahradnik@profiq.com"
     ];
   };
 
@@ -75,7 +81,6 @@
     enable = true;
   };
 
-
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.
   # programs.mtr.enable = true;
@@ -86,38 +91,22 @@
 
   # List services that you want to enable:
 
-  # Enable the OpenSSH daemon.
-services.openssh = {
-  enable = true;
-  ports = [ 22 ];
+  services.openssh = {
+    enable = true;
+    ports = [22];
 
-  settings = {
-    PasswordAuthentication = false;
-    KbdInteractiveAuthentication = false;
-    PubkeyAuthentication = true;
+    settings = {
+      PasswordAuthentication = false;
+      KbdInteractiveAuthentication = false;
+      PubkeyAuthentication = true;
 
-    PermitRootLogin = "prohibit-password";
-    X11Forwarding = false;
-    UseDns = true;
+      PermitRootLogin = "prohibit-password";
+      X11Forwarding = false;
+      UseDns = true;
+    };
   };
-};
 
-  # Open ports in the firewall.
-  # networking.firewall.allowedTCPPorts = [ ... ];
-  # networking.firewall.allowedUDPPorts = [ ... ];
-  # Or disable the firewall altogether.
-  # networking.firewall.enable = false;
-
-  # This value determines the NixOS release from which the default
-  # settings for stateful data, like file locations and database versions
-  # on your system were taken. It‘s perfectly fine and recommended to leave
-  # this value at the release version of the first install of this system.
-  # Before changing this value read the documentation for this option
-  # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
   system.stateVersion = "24.05"; # Did you read the comment?
-
-  networking.firewall.allowedTCPPorts = [ 22 53 80 443 ];
-  networking.firewall.allowedUDPPorts = [ 53 67 ];
 
   virtualisation.docker.enable = true;
   users.extraGroups.docker.members = ["bielobog"];

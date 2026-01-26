@@ -10,8 +10,8 @@
   imports = [
     # Include the results of the hardware scan.
 
-    ../../modules/wayland/hyprland.nix
-    ../../modules/bootloader/grub.nix
+    ../../modules/window-manager/waygang.nix
+    ../../modules/bootloader/bootGrub.nix
     ../../modules/usb-notifications/usb-notifications.nix
     ../../main-user.nix
     ./hardware-configuration.nix
@@ -28,14 +28,9 @@
     }
   ];
 
-  networking.hostName = "veles"; # Define your hostname.
-  networking.wireless.enable = true; # Enables wireless support via wpa_supplicant.
+  networking.hostName = "veles";
+  networking.wireless.enable = true;
 
-  # Configure network proxy if necessary
-  # networking.proxy.default = "http://user:password@proxy:port/";
-  # networking.proxy.noProxy = "127.0.0.1,localhost,internal.domain";
-
-  # Enable networking
   networking.networkmanager.enable = true;
 
   nix.settings.experimental-features = ["nix-command" "flakes"];
@@ -93,4 +88,13 @@
 
   services.openssh.enable = true;
   system.stateVersion = "23.11"; # Did you read the comment?
+
+  waygang = {
+    base.enable = true;
+
+    hyprland = {
+      enable = true;
+      user = "zahry";
+    };
+  };
 }

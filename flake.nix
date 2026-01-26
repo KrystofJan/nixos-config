@@ -11,8 +11,6 @@
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    alejandra.url = "github:kamadorueda/alejandra/3.1.0";
-    alejandra.inputs.nixpkgs.follows = "nixpkgs";
     mangowc = {
       url = "github:DreamMaoMao/mangowc";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -23,7 +21,6 @@
     self,
     nixpkgs,
     mangowc,
-    alejandra,
     ...
   } @ inputs: let
     system = "x86_64-linux";
@@ -33,15 +30,16 @@
       default = nixpkgs.lib.nixosSystem {
         specialArgs = {inherit inputs;};
         modules = [
-          ./hosts/default/configuration.nix
+          ./hosts/perun/configuration.nix
           mangowc.nixosModules.mango
         ];
       };
 
-      work = nixpkgs.lib.nixosSystem {
+      perun = nixpkgs.lib.nixosSystem {
         specialArgs = {inherit inputs;};
         modules = [
-          ./hosts/work/configuration.nix
+          ./hosts/perun/configuration.nix
+          mangowc.nixosModules.mango
         ];
       };
 
@@ -63,7 +61,7 @@
     devShells.${system}.default = pkgs.mkShell {
       packages = [
         pkgs.nixd
-        alejandra.defaultPackage.${system}
+        pkgs.alejandra
       ];
 
       shellHook = ''
