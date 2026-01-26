@@ -96,7 +96,7 @@
 
   browser = {
     zen.enable = true;
-    firefox.enable = false;
+    firefox.enable = true;
   };
 
   obs.enable = true;
