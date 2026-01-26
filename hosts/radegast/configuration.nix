@@ -42,10 +42,11 @@
   users.users.bielobog = {
     isNormalUser = true;
     description = "bielobog";
-    extraGroups = [ "networkmanager" "wheel" ];
+    extraGroups = [ "networkmanager" "wheel" "docker" ];
     packages = with pkgs; [];
     openssh.authorizedKeys.keys = [
         "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIEUf/tpXgOr7UCC4F/dV+yS8vhmF07LQns+EW7meVpTp jendazah@gmail.com"
+        "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIPCOwTJ1hVXo3EONePvgsNxkUK45KWBjaNcmofDKkAiP jan.zahradnik@profiq.com"
     ];
   };
 
@@ -65,6 +66,9 @@
     gnumake
     killall
     wget
+    openssl
+    mkcert
+    dig
   ];
 
   programs.git = {
@@ -112,4 +116,9 @@ services.openssh = {
   # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
   system.stateVersion = "24.05"; # Did you read the comment?
 
+  networking.firewall.allowedTCPPorts = [ 22 53 80 443 ];
+  networking.firewall.allowedUDPPorts = [ 53 67 ];
+
+  virtualisation.docker.enable = true;
+  users.extraGroups.docker.members = ["bielobog"];
 }
